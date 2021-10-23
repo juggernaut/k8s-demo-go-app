@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:
+      - *
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+       uses: actions/checkout@v2
+       name: Build the k8s demo app Docker image
+       run: docker build . --file Dockerfile --tag juggernaut/k8s-demo-go-app:${{ github.event.release.tag_name }}
+
+      -
+       uses: actions/checkout@v2
+       name: Push the k8s demo app Docker image to Docker Hub
+       run: docker push juggernaut/k8s-demo-go-app:${{ github.event.release.tag_name }}
+
