@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: juggernaut/k8s-demo-config
+          token: ${{ secrets.K8S_DEMO_PAT }}
           path: k8s-demo-config
 
       - name: Login to Docker Hub
