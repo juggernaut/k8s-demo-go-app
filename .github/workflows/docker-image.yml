@@ -12,11 +12,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Checkout tools repo
-      uses: actions/checkout@v2
-      with:
-        repository: juggernaut/k8s-demo-config
-        token: ${{ secrets.K8S_DEMO_PAT }}
-        path: k8s-demo-config
     - name: Build the k8s demo app Docker image
       run: docker build . --file Dockerfile --tag juggernaut/k8s-demo-go-app

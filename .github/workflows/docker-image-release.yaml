@@ -32,3 +32,20 @@ jobs:
       - name: Push the k8s demo app Docker image to Docker Hub
         run: docker push juggernaut/k8s-demo-go-app:${{ github.event.release.tag_name }}
 
+      - name: Checkout k8s config repo
+        uses: actions/checkout@v2
+        with:
+          repository: juggernaut/k8s-demo-config
+          token: ${{ secrets.K8S_DEMO_PAT }}
+          path: k8s-demo-config
+      - name: Install kustomize
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        working-directory: k8s-demo-config
+        run: |
+          curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
+          ./kustomize edit set image juggernaut/k8s-demo-go-app=juggernaut/k8s-demo-go-app:$RELEASE_TAG
+          git add .
+          git commit -m "CI: update image tag to $RELEASE_TAG"
+          git push
+
