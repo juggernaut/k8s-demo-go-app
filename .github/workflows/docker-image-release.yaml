@@ -39,12 +39,17 @@ jobs:
           token: ${{ secrets.K8S_DEMO_PAT }}
           path: k8s-demo-config
       - name: Install kustomize
+        working-directory: k8s-demo-config
+        run: |
+          curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
+      - name: Update k8s-demo-app image tag
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         working-directory: k8s-demo-config
         run: |
-          curl -s https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash
           ./kustomize edit set image juggernaut/k8s-demo-go-app=juggernaut/k8s-demo-go-app:$RELEASE_TAG
+          git config user.name "k8s demo CI bot"
+          git config user.email "<>"
           git add .
           git commit -m "CI: update image tag to $RELEASE_TAG"
           git push
