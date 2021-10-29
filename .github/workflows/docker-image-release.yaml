@@ -50,7 +50,7 @@ jobs:
           ./kustomize edit set image juggernaut/k8s-demo-go-app=juggernaut/k8s-demo-go-app:$RELEASE_TAG
           git config user.name "k8s demo CI bot"
           git config user.email "<>"
-          git add .
+          git add kustomization.yaml
           git commit -m "CI: update image tag to $RELEASE_TAG"
           git push
 
